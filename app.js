@@ -5,18 +5,26 @@ function validateData() {
     let input = _text1;
     let output = _text2;
 
-    let inp = parseInputFile(input);
-    let out = parseOutput(output);
 
-    let score = calculateScore(out, inp.F, inp.D);
-    let validationResults = validateOutputFile(output, input);
+    let inputValidation = validateInput(input);
 
-    console.log(score);
-    document.getElementById("result").innerHTML = "The calculated score is: " + score;
-    document.getElementById("validation").innerHTML = createValidationTable(validationResults);
-    document.getElementById("inputForm").classList.add("hidden");
+    if (inputValidation !== "ok") {
+        document.getElementById("result").innerHTML = inputValidation;
+    } else {
 
-    let b = `
+
+        let inp = parseInputFile(input);
+        let out = parseOutput(output);
+
+        let score = calculateScore(out, inp.F, inp.D);
+        let validationResults = validateOutputFile(output, input);
+
+        console.log(score);
+        document.getElementById("result").innerHTML = "The calculated score is: " + score;
+        document.getElementById("validation").innerHTML = createValidationTable(validationResults);
+        document.getElementById("inputForm").classList.add("hidden");
+
+        let b = `
     <div class="row">
         <p>Duration of simulation: ${_D}</p>
         <p>Number of intersections: ${_I}</p>
@@ -26,10 +34,87 @@ function validateData() {
     </div>
     `;
 
-    document.getElementById("info").innerHTML = b;
-
-    simulateTraffic(input, output);
+        document.getElementById("info").innerHTML = b;
+    }
 }
+
+
+
+// Function to validate the input file
+function validateInput(input) {
+    const lines = input.trim().split('\n');
+    const [D, I, S, V, F] = lines[0].split(' ').map(Number);
+
+    if (isNaN(D) || isNaN(I) || isNaN(S) || isNaN(V) || isNaN(F)) {
+        return 'Invalid input: first line must contain five integers';
+    }
+
+    if (lines.length !== S + V + 1) {
+        return 'Invalid input: incorrect number of lines';
+    }
+
+    const streets = new Set();
+    for (let i = 1; i <= S; i++) {
+        const [B, E, name, L] = lines[i].split(' ');
+        if (isNaN(B) || isNaN(E) || isNaN(L)) {
+            return `Invalid input: street ${i} is incorrect`;
+        }
+        streets.add(name);
+    }
+
+    for (let i = S + 1; i <= S + V; i++) {
+        const [P, ...path] = lines[i].split(' ');
+        for (const street of path) {
+            if (!streets.has(street)) {
+                return `Invalid input: car ${i - S} path includes unknown street "${street}"`;
+            }
+        }
+    }
+
+    return 'ok';
+}
+
+// Function to validate the output file
+
+function validateSubmissionFile(file) {
+    const lines = file.trim().split("\n");
+    const [A, I, D, F, T] = lines[0].split(" ").map(Number);
+    let i = 1;
+    let isValid = true;
+
+    while (i < lines.length) {
+        const [intersectionId, incomingStreets] = lines[i].split(" ").map(Number);
+        i++;
+
+        const streetNames = new Set();
+        for (let j = 0; j < incomingStreets; j++) {
+            const [streetName, greenDuration] = lines[i].split(" ");
+            streetNames.add(streetName);
+            i++;
+
+            if (greenDuration < 1 || greenDuration > T) {
+                isValid = false;
+                break;
+            }
+        }
+
+        if (streetNames.size !== incomingStreets) {
+            isValid = false;
+        }
+    }
+
+    return isValid;
+}
+
+
+
+
+
+
+
+
+
+// Function to parse the output file
 
 
 function parseOutput(output) {
