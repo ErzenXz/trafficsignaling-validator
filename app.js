@@ -189,7 +189,7 @@ function parseSubmittedDataSet(data) {
         }
 
         if (isNaN(numIncomingStreets)) {
-            results.push(`Invalid number of elements found at line ${currentLine + i + 3}`);
+            results.push(`Invalid number of elements found at line ${currentLine + i + 3} Error-Code:` + `Invalid number of elements found at line ${currentLine + i + 3}`);
             // throw new Error(
             //     `Invalid number of elements found at line ${currentLine + i + 3}`
             // );
@@ -198,7 +198,7 @@ function parseSubmittedDataSet(data) {
         }
 
         if (intersectionSchedulesById[intersectionId]) {
-            results.push(`More than one adjustment was provided for intersection ${intersectionId}.`);
+            results.push(`More than one adjustment was provided for intersection ${intersectionId}.` + `Error-Code: More than one adjustment was provided for intersection ${intersectionId}.`);
             // throw new Error(
             //     `More than one adjustment was provided for intersection ${intersectionId}.`
             // );
