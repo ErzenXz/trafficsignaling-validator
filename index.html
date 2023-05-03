@@ -7,32 +7,47 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo&family=Lato&family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/kinet@2.2.1/dist/kinet.min.js"></script>
+
 </head>
 
 <body>
-    <div id="container">
-        <h1>Traffic Signaling Problem Solution Validator</h1>
-        <div id="inputForm">
-            <label for="file1">Input:</label>
-            <input type="file" class="custom-file-input" id="file1" accept=".txt">
-            <br>
-            <label for="file2">Output:</label>
-            <input type="file" class="custom-file-input" id="file2" accept=".txt">
-            <br>
-            <button id="btn" class="hidden" onclick="validateData()">Validate</button>
-        </div>
-        <h2 id="result"></h2>
-        <div id="info"></div>
-        <h2 id="validation"></h2>
-        <script src="app.js"></script>
 
-
-
+    <div class="loading-screen hidden" id="loading">
+        <div class="loading-spinner"></div>
     </div>
 
-    <div class="version">
-        <p>Version 1.2.1 Beta</p>
-        <pre>ErzenK           All rights reserved         2023©</pre>
+    <div class="background-image"></div>
+    <div class="content">
+
+        <div id="container">
+            <h1>Traffic Signaling Problem Solution Validator</h1>
+            <div id="inputForm">
+                <label for="file1">Input:</label>
+                <input type="file" class="custom-file-input" id="file1" accept=".txt">
+                <br>
+                <label for="file2">Output:</label>
+                <input type="file" class="custom-file-input" id="file2" accept=".txt">
+                <br>
+                <button id="btn" class="hidden" onclick="validateData()">Validate</button>
+            </div>
+            <h2 id="result"></h2>
+            <div id="info"></div>
+            <h2 id="validation"></h2>
+            <script defer src="app.js"></script>
+
+
+
+        </div>
+
+        <div id="circle" class="circle"></div>
+
+
+        <div class="version">
+            <p>Version 1.2.5</p>
+            <pre>ErzenK           All rights reserved         2023©</pre>
+        </div>
+
     </div>
 </body>
 

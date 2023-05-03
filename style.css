@@ -9,26 +9,55 @@ html {
 
 /* Set background color and font styles */
 body {
-    background-color: #f0f2f5;
+    background-color: #000000;
+    /* black background */
+    position: relative;
+    /* set position to relative for stacking context */
     font-family: 'Lato', sans-serif;
     font-size: 16px;
+    overflow: hidden;
+    user-select: none;
+}
+
+.background-image {
+    margin-top: -55px;
+    margin-left: -30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 105vw;
+    height: 105vh;
+    overflow: hidden;
+    z-index: -1;
+    background-image: url('image2.jpg');
+    background-size: cover;
+    object-fit: fill;
+    background-repeat: no-repeat;
+    filter: blur(5px);
+    transition: all 0.35s cubic-bezier(0.39, 0.575, 0.565, 1) 0ms;
 }
 
 /* Container for the validator */
 #container {
+    color: rgba(0, 0, 0, 0.838);
+    /* white text color */
+
     max-width: 800px;
+    max-height: 400px;
+    overflow-y: auto;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-top: 2%;
     border-radius: 12px;
-    border: 1px solid lightgrey;
+    border: transparent;
+    backdrop-filter: blur(10px);
 }
 
 /* Title style */
 h1 {
-    color: #282727;
+    color: rgba(0, 0, 0, 0.838);
     text-align: center;
     margin-top: 0;
 }
@@ -38,7 +67,7 @@ label {
     display: block;
     margin-bottom: 2px;
     margin-top: 15px;
-    color: #777;
+    color: rgba(0, 0, 0, 0.838);
 }
 
 /* Button style */
@@ -46,8 +75,8 @@ button {
     display: block;
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: rgba(0, 0, 0, 0.838);
     border: none;
     border-radius: 3px;
     cursor: pointer;
@@ -56,7 +85,7 @@ button {
 
 /* Button hover effect */
 button:hover {
-    background-color: #0056b3;
+    background-color: rgba(255, 255, 255, 0.503);
 }
 
 /* Result and validation styles */
@@ -64,26 +93,56 @@ button:hover {
 #validation {
     margin-top: 20px;
     text-align: center;
-    color: #555;
+    color: rgba(0, 0, 0, 0.838);
     font-size: 16px;
 }
 
+#info {
+    margin-top: 20px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.838);
+    font-size: 16px;
+    border: transparent;
+    outline: none;
+    user-select: text;
+}
 
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.34);
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 16px;
+    border-radius: 2px;
+    border: none;
+    outline: none;
+    user-select: text;
+}
+
+
+thead {
+    border-radius: 12px;
+    border: none;
 }
 
 td,
 th {
-    border: 1px solid lightgrey;
+    border-radius: 12px;
+    border: 1px solid rgba(211, 211, 211, 0.323);
     text-align: left;
     padding: 8px;
+    color: #1f1e1e !important;
+    text-shadow: 1px 1px #c1bdbd2f;
+}
+
+th {
+    text-align: center;
+}
+
+.res {
+    text-align: center !important;
 }
 
 #inputForm {
@@ -103,25 +162,26 @@ th {
 .custom-file-input::before {
     content: 'Select some files';
     display: inline-block;
-    background: linear-gradient(top, #f9f9f9, #e3e3e3);
-    border: 1px solid #999;
+    background: linear-gradient(top, #2b2951, #2456ca);
+    border: 1px solid rgba(0, 0, 0, 0.605);
     border-radius: 3px;
     padding: 5px 8px;
     outline: none;
     white-space: nowrap;
     -webkit-user-select: none;
     cursor: pointer;
-    text-shadow: 1px 1px #fff;
+    text-shadow: 1px 1px #c1bdbd2f;
     font-weight: 700;
     font-size: 10pt;
 }
 
 .custom-file-input:hover::before {
-    border-color: black;
+    border-color: rgba(0, 0, 0, 0.605);
 }
 
 .custom-file-input:active::before {
-    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    color: whitesmoke;
+    background: -webkit-linear-gradient(top, #562222, #da1717);
 }
 
 .hidden {
@@ -133,4 +193,54 @@ th {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: rgba(220, 220, 220, 0.838);
+}
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 50;
+}
+
+
+.loading-spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.circle {
+    width: 185px;
+    height: 185px;
+    background: linear-gradient(to top left, #979fa7a9, #2f8ec598);
+    filter: blur(5px) saturate(1.5) brightness(0.8) contrast(1.2);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -20px 0 0 -20px;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    z-index: -1;
 }

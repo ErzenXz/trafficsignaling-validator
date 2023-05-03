@@ -47,29 +47,28 @@ file1Input.addEventListener('change', function (event) {
 
 
 
-
-
-
-
-
 function validateData() {
+    document.getElementById("loading").classList.remove("hidden");
+
     let input = _text1;
     let output = _text2;
 
-    parseInputDataSet(input);
-    parseSubmittedDataSet(output);
-    simulate();
-    let score = createInsights();
-    let r = new Set(results);
+    setTimeout(() => {
+        parseInputDataSet(input);
+        parseSubmittedDataSet(output);
+        simulate();
+        let score = createInsights();
+        let r = new Set(results);
 
-    results = [...r];
+        results = [...r];
 
-    let table = generateTable(results);
+        let table = generateTable(results);
 
-    document.getElementById("result").innerHTML = score;
-    document.getElementById("result").classList.remove("hidden");
-    document.getElementById("info").classList.remove("hidden");
-    document.getElementById("info").innerHTML = table;
+        document.getElementById("result").innerHTML = score;
+        document.getElementById("result").classList.remove("hidden");
+        document.getElementById("inputForm").classList.add("hidden");
+        document.getElementById("info").innerHTML = table;
+    }, 300);
 }
 
 function generateTable(dataArray) {
@@ -87,12 +86,20 @@ function generateTable(dataArray) {
         // Generate the table row with the constraint and result columns
         tableHTML += '<tr>';
         tableHTML += `<td>${dataArray[i]}</td>`;
-        tableHTML += `<td>${result}</td>`;
+        tableHTML += `<td style="
+        text-align: center;
+    ">${result}</td>`;
         tableHTML += '</tr>';
     }
 
     tableHTML += '</tbody>';
     tableHTML += '</table>';
+
+    setTimeout(() => {
+        document.getElementById("loading").classList.add("hidden");
+
+    }, 500);
+
 
     return tableHTML;
 }
@@ -381,3 +388,72 @@ function createInsights() {
         ].join(' '),
     ].join('\n\n');
 }
+
+const images = [
+    'image.jpg',
+    'image2.jpg',
+    'image3.jpg',
+    'image4.jpg',
+    'image5.jpg',
+    'image6.jpg',
+    'image7.png',
+    'image8.jpg',
+    'image9.jpg',
+    'image10.jpg',
+];
+
+shuffleArray(images);
+
+
+let currentIndex = 0;
+const intervalTime = 30000; // 10 seconds in milliseconds
+
+setInterval(() => {
+    const background = document.querySelector('.background-image');
+    background.style.backgroundImage = `url(${images[currentIndex]})`;
+    currentIndex = (currentIndex + 1) % images.length;
+}, intervalTime);
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+
+// create instance of kinet with custom settings
+var kinet = new Kinet({
+    acceleration: 0.07,
+    friction: 0.20,
+    names: ["x", "y"],
+});
+
+// select circle element
+var circle = document.getElementById('circle');
+
+// set handler on kinet tick event
+kinet.on('tick', function (instances) {
+    circle.style.transform = `translate3d(${(instances.x.current)}px, ${(instances.y.current)}px, 0) rotateX(${(instances.x.velocity / 2)}deg) rotateY(${(instances.y.velocity / 2)}deg)`;
+});
+
+// call kinet animate method on mousemove
+document.addEventListener('mousemove', function (event) {
+    kinet.animate('x', event.clientX - window.innerWidth / 2);
+    kinet.animate('y', event.clientY - window.innerHeight / 2);
+});
+
+
+
+
+
+
+
+// log
+kinet.on('start', function () {
+    console.log('start');
+});
+
+kinet.on('end', function () {
+    console.log('end');
+});
