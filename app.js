@@ -80,7 +80,7 @@ function generateTable(dataArray) {
     // Loop through each string in the dataArray and generate a table row
     for (let i = 0; i < dataArray.length; i++) {
         let result = '✅'; // default to a checkmark for normal results
-        if (dataArray[i].indexOf('error') !== -1) {
+        if (dataArray[i].indexOf('Error-Code') !== -1) {
             result = '❌'; // if the string contains "error", use an x mark instead
         }
 
@@ -180,28 +180,28 @@ function parseSubmittedDataSet(data) {
 
         if (typeof numIncomingStreets === 'undefined') {
             results.push("Submission file has fewer lines than expected Error-Code:" + `Unexpected EOF (end of file) at line ${currentLine + i + 2}`);
-            throw new Error([
-                'Submission file has fewer lines than expected',
-                `Unexpected EOF (end of file) at line ${currentLine + i + 2}`,
-            ].join('. '));
+            // throw new Error([
+            //     'Submission file has fewer lines than expected',
+            //     `Unexpected EOF (end of file) at line ${currentLine + i + 2}`,
+            // ].join('. '));
         } else {
             results.push("Submission file has normal number of lines");
         }
 
         if (isNaN(numIncomingStreets)) {
             results.push(`Invalid number of elements found at line ${currentLine + i + 3}`);
-            throw new Error(
-                `Invalid number of elements found at line ${currentLine + i + 3}`
-            );
+            // throw new Error(
+            //     `Invalid number of elements found at line ${currentLine + i + 3}`
+            // );
         } else {
             results.push("Submission file has normal number of elements");
         }
 
         if (intersectionSchedulesById[intersectionId]) {
             results.push(`More than one adjustment was provided for intersection ${intersectionId}.`);
-            throw new Error(
-                `More than one adjustment was provided for intersection ${intersectionId}.`
-            );
+            // throw new Error(
+            //     `More than one adjustment was provided for intersection ${intersectionId}.`
+            // );
         } else {
             results.push("Submission file has normal number of adjustments");
         }
@@ -220,21 +220,21 @@ function parseSubmittedDataSet(data) {
                 dataset.streets[streetName].end !== +intersectionId
             ) {
                 results.push("Submission file has invalid street names " + `Error-Code: The schedule of intersection ${intersectionId} refers to street ${streetName}, but that street does not enter this intersection, so it cannot be part of the intersection schedule.`);
-                throw new Error([
-                    `The schedule of intersection ${intersectionId} refers to street`,
-                    `${streetName}, but that street does not enter this intersection,`,
-                    'so it cannot be part of the intersection schedule.',
-                ].join(' '));
+                // throw new Error([
+                //     `The schedule of intersection ${intersectionId} refers to street`,
+                //     `${streetName}, but that street does not enter this intersection,`,
+                //     'so it cannot be part of the intersection schedule.',
+                // ].join(' '));
             } else {
                 results.push("Submission file has normal street names");
             }
 
             if (isNaN(schedule)) {
                 results.push("Submission file has invalid schedule " + `Error-Code: The schedule of street ${streetName} has a duration for green light that is not a number: ${schedule}.`);
-                throw new Error([
-                    `The schedule of street ${streetName} has a duration for green light`,
-                    `that is not a number: ${schedule}.`,
-                ].join(' '));
+                // throw new Error([
+                //     `The schedule of street ${streetName} has a duration for green light`,
+                //     `that is not a number: ${schedule}.`,
+                // ].join(' '));
             } else {
                 results.push("Submission file has normal schedule for green light");
             }
@@ -242,10 +242,10 @@ function parseSubmittedDataSet(data) {
 
             if (schedule < 1 || schedule > dataset.simulation.duration) {
                 results.push("Submission file has invalid schedule " + `Error-Code: The schedule of street ${streetName} should have duration for green light that is between 1 and ${dataset.simulation.duration}.`);
-                throw new Error([
-                    `The schedule of street ${streetName} should have duration`,
-                    `for green light that is between 1 and ${dataset.simulation.duration}.`,
-                ].join(' '));
+                // throw new Error([
+                //     `The schedule of street ${streetName} should have duration`,
+                //     `for green light that is between 1 and ${dataset.simulation.duration}.`,
+                // ].join(' '));
             } else {
                 results.push("Submission file has normal schedule for duration");
             }
