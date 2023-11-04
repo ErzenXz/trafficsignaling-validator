@@ -78,9 +78,9 @@ function generateTable(dataArray) {
 
     // Loop through each string in the dataArray and generate a table row
     for (let i = 0; i < dataArray.length; i++) {
-        let result = '✅'; // default to a checkmark for normal results
+        let result = '<i class="fa-solid fa-check"></i>'; // default to a checkmark for normal results
         if (dataArray[i].indexOf('Error-Code') !== -1) {
-            result = '❌'; // if the string contains "error", use an x mark instead
+            result = '<i class="fa-solid fa-xmark"></i>'; // if the string contains "error", use an x mark instead
         }
 
         // Generate the table row with the constraint and result columns
@@ -368,19 +368,37 @@ function createInsights() {
     ];
 
     if (arrivedCars.length) {
-        // arrivedCarsInsights.push(...[
-        //     `The earliest car arrived at its destination after ${arrivedCars[0].commuteTime}`,
-        //     `seconds scoring ${arrivedCars[0].score} points, whereas the last`,
-        //     `car arrived at its destination after ${arrivedCars[numArrivedCars - 1].commuteTime}`,
-        //     `seconds scoring ${arrivedCars[numArrivedCars - 1].score} points.`,
-        //     `Cars that arrived within the deadline drove for an average of ${averageCommuteTime}`,
-        //     'seconds to arrive at their destination.',
-        // ]);
+        arrivedCarsInsights.push(...[
+            `The earliest car arrived at its destination after ${arrivedCars[0].commuteTime}`,
+            `seconds scoring ${arrivedCars[0].score} points, whereas the last`,
+            `car arrived at its destination after ${arrivedCars[numArrivedCars - 1].commuteTime}`,
+            `seconds scoring ${arrivedCars[numArrivedCars - 1].score} points.`,
+            `Cars that arrived within the deadline drove for an average of ${averageCommuteTime}`,
+            'seconds to arrive at their destination.',
+        ]);
+
+        if (bonusPoint) {
+            arrivedCarsInsights.push(...[
+                `The total bonus points earned by cars that arrived within the deadline`,
+                `is ${earlyArrivalBonus} points.`,
+            ]);
+        }
+
+        if (numArrivedCars < numCars) {
+            const numLateCars = numCars - numArrivedCars;
+
+            arrivedCarsInsights.push(...[
+                `${numLateCars} of ${numCars} cars arrived after the deadline`,
+                `(${toPercentage(numLateCars / numCars)}).`,
+            ]);
+        }
+
+
     }
 
     return [
         [
-            `The submission file scored ${score} points.`,
+            `The submited file has scored <h1>${score} points</h1><br><br>`,
         ].join(' '),
         arrivedCarsInsights.join(' '),
         [
@@ -389,71 +407,24 @@ function createInsights() {
     ].join('\n\n');
 }
 
-const images = [
-    'image.jpg',
-    'image2.jpg',
-    'image3.jpg',
-    'image4.jpg',
-    'image5.jpg',
-    'image6.jpg',
-    'image7.png',
-    'image8.jpg',
-    'image9.jpg',
-    'image10.jpg',
-];
 
-shuffleArray(images);
-
-
-let currentIndex = 0;
-const intervalTime = 30000; // 10 seconds in milliseconds
-
-setInterval(() => {
-    const background = document.querySelector('.background-image');
-    background.style.backgroundImage = `url(${images[currentIndex]})`;
-    currentIndex = (currentIndex + 1) % images.length;
-}, intervalTime);
-
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+function downloadInsights() {
+    let text = document.getElementById("info").innerText;
+    let filename = "insights.txt";
+    download(filename, text);
 }
 
+function download(filename, text) {
+    let element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
 
-// create instance of kinet with custom settings
-var kinet = new Kinet({
-    acceleration: 0.07,
-    friction: 0.20,
-    names: ["x", "y"],
-});
+    element.setAttribute('download', filename);
 
-// select circle element
-var circle = document.getElementById('circle');
+    element.style.display = 'none';
+    document.body.appendChild(element);
 
-// set handler on kinet tick event
-kinet.on('tick', function (instances) {
-    circle.style.transform = `translate3d(${(instances.x.current)}px, ${(instances.y.current)}px, 0) rotateX(${(instances.x.velocity / 2)}deg) rotateY(${(instances.y.velocity / 2)}deg)`;
-});
+    element.click();
 
-// call kinet animate method on mousemove
-document.addEventListener('mousemove', function (event) {
-    kinet.animate('x', event.clientX - window.innerWidth / 2);
-    kinet.animate('y', event.clientY - window.innerHeight / 2);
-});
+    document.body.removeChild(element);
+}
 
-
-
-
-
-
-
-// log
-kinet.on('start', function () {
-    console.log('start');
-});
-
-kinet.on('end', function () {
-    console.log('end');
-});

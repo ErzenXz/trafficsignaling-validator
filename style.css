@@ -1,63 +1,99 @@
-/* style.css */
-
-/* Reset default margin and padding */
-body,
-html {
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-/* Set background color and font styles */
+:root {
+    --white-color: #fff;
+    --blue-color: #eff2f6;
+    --grey-color: #707070;
+    --grey-color-light: #aaa;
+
+    --blue-color-hover: #e3e6ed;
+
+    --link-hover: #333;
+    --text-color: #141824;
+
+    --border: #cbd0dd;
+    --border-hover: #333;
+
+    --sidebar: #fff;
+    --navbar: #fff;
+
+    --navbar-blur: rgba(255, 255, 255, 0.5);
+
+    --button: #f5f7fa;
+    --button-hover: #cbd0dd;
+
+    --scrollbar: #fff;
+    --scrollbar-thumb: rgb(170, 175, 186);
+    --scrollbar-thumb-hover: #d3d6de;
+
+    --body: #f5f7fa;
+    --toast: #777;
+    --toast-color: #e3e6ed;
+    --sidebar-blur: rgba(255, 255, 255, 0.5);
+}
+
+body.dark {
+    --white-color: #333;
+    --blue-color: #31374a;
+    --grey-color: #f2f2f2;
+    --grey-color-light: #aaa;
+
+    --blue-color-hover: rgb(65, 73, 99);
+
+    --link-hover: white;
+    --text-color: #e3e6ed;
+
+    --border: #31374a;
+    --border-hover: #777;
+
+    --sidebar: #141824;
+    --navbar: #141824;
+
+    --navbar-blur: rgba(20, 24, 36, 0.5);
+
+    --button: #0f111a;
+    --button-hover: #141824;
+
+    --scrollbar: #141824;
+    --scrollbar-thumb: #31374a;
+    --scrollbar-thumb-hover: rgb(65, 73, 99);
+
+    --toast: #31374a;
+    --toast-color: #e3e6ed;
+    --sidebar-blur: rgba(20, 24, 36, 0.5);
+}
+
+
 body {
-    background-color: #000000;
-    /* black background */
-    position: relative;
-    /* set position to relative for stacking context */
     font-family: 'Lato', sans-serif;
-    font-size: 16px;
-    overflow: hidden;
-    user-select: none;
+    color: var(--text-color) !important;
+    background-color: var(--button);
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0ms;
 }
 
-.background-image {
-    margin-top: -55px;
-    margin-left: -30px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 105vw;
-    height: 105vh;
-    overflow: hidden;
-    z-index: -1;
-    background-image: url('image2.jpg');
-    background-size: cover;
-    object-fit: fill;
-    background-repeat: no-repeat;
-    filter: blur(5px);
-    transition: all 0.35s cubic-bezier(0.39, 0.575, 0.565, 1) 0ms;
-}
 
 /* Container for the validator */
 #container {
-    color: rgba(0, 0, 0, 0.838);
-    /* white text color */
-
-    max-width: 800px;
-    max-height: 400px;
+    color: var(--text-color) !important;
+    background-color: var(--sidebar);
+    max-width: 70vw;
+    max-height: 80vh;
     overflow-y: auto;
     margin: 0 auto;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-top: 2%;
     border-radius: 12px;
-    border: transparent;
-    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
 }
 
 /* Title style */
 h1 {
-    color: rgba(0, 0, 0, 0.838);
+    color: var(--text-color) !important;
     text-align: center;
     margin-top: 0;
 }
@@ -67,7 +103,7 @@ label {
     display: block;
     margin-bottom: 2px;
     margin-top: 15px;
-    color: rgba(0, 0, 0, 0.838);
+    color: var(--text-color) !important;
 }
 
 /* Button style */
@@ -75,9 +111,9 @@ button {
     display: block;
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.3);
-    color: rgba(0, 0, 0, 0.838);
-    border: none;
+    background-color: var(--button);
+    color: var(--text-color) !important;
+    border: 1px solid var(--border);
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -85,7 +121,7 @@ button {
 
 /* Button hover effect */
 button:hover {
-    background-color: rgba(255, 255, 255, 0.503);
+    background-color: var(--button-hover);
 }
 
 /* Result and validation styles */
@@ -93,14 +129,14 @@ button:hover {
 #validation {
     margin-top: 20px;
     text-align: center;
-    color: rgba(0, 0, 0, 0.838);
+    color: var(--text-color) !important;
     font-size: 16px;
 }
 
 #info {
     margin-top: 20px;
     text-align: center;
-    color: rgba(0, 0, 0, 0.838);
+    color: var(--text-color) !important;
     font-size: 16px;
     border: transparent;
     outline: none;
@@ -111,7 +147,7 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.34);
+    background-color: var(--blue-color);
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 16px;
@@ -129,12 +165,10 @@ thead {
 
 td,
 th {
-    border-radius: 12px;
-    border: 1px solid rgba(211, 211, 211, 0.323);
+    border: 1px solid var(--border);
     text-align: left;
     padding: 8px;
-    color: #1f1e1e !important;
-    text-shadow: 1px 1px #c1bdbd2f;
+    color: var(--text-color) !important;
 }
 
 th {
@@ -143,6 +177,10 @@ th {
 
 .res {
     text-align: center !important;
+}
+
+tr:nth-child(even) {
+    background-color: var(--blue-color-hover);
 }
 
 #inputForm {
@@ -163,25 +201,25 @@ th {
     content: 'Select some files';
     display: inline-block;
     background: linear-gradient(top, #2b2951, #2456ca);
-    border: 1px solid rgba(0, 0, 0, 0.605);
+    border: 1px solid var(--border);
     border-radius: 3px;
     padding: 5px 8px;
     outline: none;
     white-space: nowrap;
     -webkit-user-select: none;
+    user-select: none;
     cursor: pointer;
-    text-shadow: 1px 1px #c1bdbd2f;
     font-weight: 700;
     font-size: 10pt;
 }
 
 .custom-file-input:hover::before {
-    border-color: rgba(0, 0, 0, 0.605);
+    border-color: var(--border-hover);
 }
 
 .custom-file-input:active::before {
-    color: whitesmoke;
-    background: -webkit-linear-gradient(top, #562222, #da1717);
+    color: var(--text-color);
+    background: -webkit-linear-gradient(top, var(--blue-color), var(--blue-color-hover));
 }
 
 .hidden {
@@ -193,7 +231,8 @@ th {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: rgba(220, 220, 220, 0.838);
+    color: var(--text-color) !important;
+    margin-top: 20px;
 }
 
 .loading-screen {
@@ -205,15 +244,15 @@ th {
     align-items: center;
     height: 100vh;
     width: 100vw;
-    background-color: rgb(0, 0, 0, 0.5);
+    background-color: var(--navbar-blur);
     backdrop-filter: blur(5px);
     z-index: 50;
 }
 
 
 .loading-spinner {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
+    border: 5px solid var(--border);
+    border-top: 5px solid var(--blue-color);
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -230,17 +269,7 @@ th {
     }
 }
 
-.circle {
-    width: 185px;
-    height: 185px;
-    background: linear-gradient(to top left, #979fa7a9, #2f8ec598);
-    filter: blur(5px) saturate(1.5) brightness(0.8) contrast(1.2);
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -20px 0 0 -20px;
-    pointer-events: none;
-    mix-blend-mode: multiply;
-    z-index: -1;
+::selection {
+    background-color: var(--blue-color-hover);
+    color: var(--text-color);
 }
