@@ -12,31 +12,27 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz@6..12&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.css"
-        integrity="sha512-zdX1vpRJc7+VHCUJcExqoI7yuYbSFAbSWxscAoLF0KoUPvMSAK09BaOZ47UFdP4ABSXpevKfcD0MTVxvh0jLHQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.min.css"
-        integrity="sha512-uPqDOam5vjVgnASE75fCgMtdLa3oK2+3muDU5ESulSImHAA0Z0xjEnuJpKowTsXUWY09MsYre48zgBFwh2P/yw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Validator • Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz@6..12&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+
+
+    <title>Validator • My Submissions</title>
     <link rel="stylesheet" href="css/dashboard.css" />
     <link rel="stylesheet" href="css/files.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/my.css">
 
 
-    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-auth.min.js"></script>
 
 </head>
 
 <body>
 
-    <!-- <div class="loading-screen" id="loading">
+    <div class="loading-screen hidden" id="loading">
         <div class="loading-spinner"></div>
 
-    </div> -->
+    </div>
 
 
     <!-- navbar -->
@@ -75,7 +71,7 @@
 
                 <!-- start -->
                 <li class="item">
-                    <a href="index.html" class="nav_link submenu_item active">
+                    <a href="index.html" class="nav_link submenu_item ">
                         <span class="navlink_icon">
                             <i class="bx bx-home-alt"></i>
                         </span>
@@ -84,9 +80,10 @@
                 </li>
                 <!-- end -->
 
+
                 <!-- start -->
                 <li class="item">
-                    <a href="mysubmissions.html" class="nav_link submenu_item">
+                    <a href="document.html" class="nav_link submenu_item active">
                         <span class="navlink_icon">
                             <i class="fa-solid fa-star"></i> </span>
                         <span class="navlink">My Scores</span>
@@ -108,6 +105,8 @@
                 <br>
                 <br>
                 <br>
+
+
             </ul>
 
 
@@ -135,64 +134,14 @@
 
         <div class="topp">
             <div>
-                <h1>Home</h1>
+                <h1>My Submissions</h1>
             </div>
         </div>
 
-
-        <div class="information">
-            <p>
-                Welcome to the Traffic Signaling Problem Validator! This website allows you to validate your submission
-                files
-                for the Traffic Signaling problem from Google Hashcode competition. You can also view the scores of
-                other participants.
-            </p>
-            <p>
-                The Traffic Signaling problem involves optimizing traffic signal schedules at intersections to minimize
-                the total time
-                that vehicles spend waiting at red lights. By submitting your solution files, you can check if your
-                implementation
-                meets the requirements and evaluate its performance.
-            </p>
-            <p>
-                To get started, upload your submission file using the form below. The validator will analyze your file
-                and provide
-                feedback on its correctness and efficiency. You can also explore the scores of other participants to see
-                how your
-                solution compares.
-            </p>
-        </div>
-
-        <div class="links">
-            <div class="image-text" onclick="openLink('https://trafficsignaling.instance.generator.erzen.tk/')">
-                <img src="images/foto1.png" alt="Image 1">
-                <p>Instance Generator</p>
-            </div>
-
-            <div class="image-text" onclick="openLink('https://traffic-signaling.netlify.app/')">
-                <img src="images/foto2.png" alt="Image 2">
-                <p>Graphical Analyzer</p>
-            </div>
-
-            <div class="image-text" onclick="openLink('https://traffic-light-scheduling.uni-pr.edu/')">
-                <img src="images/foto3.jpeg" alt="Image 3">
-                <p>Problem Info</p>
-            </div>
-        </div>
-
-        <div class="submit">
-            <h2>Submit your solution</h2>
-            <p>Upload your submission file to validate it.</p>
-            <button onclick="gotoSubmit()">Submit Solution</button>
-        </div>
-
-        <br>
-
+        <div class="mySubs" id="mySubmissions"></div>
 
     </main>
 
-    <!-- <div id="search-results" class="hidden">
-    </div> -->
 
     <div id="upload-container" class="upload-container"></div>
 
@@ -226,7 +175,8 @@
     <!-- JavaScript -->
     <script defer src="js/dashboard.js"></script>
 
-    <script defer src="js/documents.js"></script>
+    <script defer src="js/my.js"></script>
+
 
 
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.js"

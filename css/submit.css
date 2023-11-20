@@ -1,0 +1,169 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#inputForm {
+    width: 100%;
+    padding: 20px;
+    background-color: var(--blue-color);
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    color: var(--text-color);
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+#inputForm label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+#inputForm input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+
+#inputForm button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background-color: var(--button);
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#inputForm button:hover {
+    background-color: var(--button-hover);
+}
+
+#result {
+    width: 100%;
+    padding: 20px;
+    background-color: var(--button);
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    color: var(--text-color);
+}
+
+#result {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Info Table */
+
+#info {
+    width: 100%;
+    padding: 20px;
+    background-color: var(--button);
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    color: var(--text-color);
+}
+
+#info h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+#info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#info table tr th {
+    padding: 10px;
+    border: 1px solid var(--border);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#info table tr td {
+    padding: 10px;
+    border: 1px solid var(--border);
+    font-size: 16px;
+}
+
+#info table tr td a {
+    color: var(--blue-color);
+    text-decoration: none;
+}
+
+#info table tr td a:hover {
+    text-decoration: underline;
+}
+
+#loading {
+    z-index: 99999999;
+}
+
+.change {
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    margin-right: 20px;
+}
+
+.bigscore {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#scores {
+    width: 100%;
+    padding: 20px;
+    background-color: var(--blue-color);
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    color: var(--text-color);
+}
+
+#scores .sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--border);
+}
+
+#scores .sub .s {
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    width: fit-content;
+    width: 30%;
+}
+
+#scores .sub .u {
+    font-size: 16px;
+}
+
+#scores .sub .t {
+    font-size: 12px;
+}
+
+.mini {
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    width: fit-content;
+}
