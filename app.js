@@ -1,4 +1,6 @@
 
+Chart.register(ChartDataLabels);
+
 async function calculateFileHash(fileInput) {
     try {
         let file = fileInput.files[0];
@@ -647,7 +649,7 @@ function createInsights() {
             // If it has not failed, then create a chart
 
 
-
+            // Show in the percentage format
             let chart = document.getElementById("myChart");
             let ctx = chart.getContext('2d');
             let myChart = new Chart(ctx, {
@@ -669,7 +671,18 @@ function createInsights() {
                         title: {
                             display: true,
                             text: 'Cars before Deadline vs Cars after Deadline'
-                        }
+                        },
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                let dataset = ctx.chart.data.datasets[0];
+                                let total = dataset.data.reduce((acc, data) => acc + data, 0);
+                                let percentage = ((value / total) * 100).toFixed(2) + "%";
+                                return percentage;
+                            },
+                            color: '#fff',
+                            anchor: 'end', // Adjust the anchor for better placement
+                            align: 'start', // Align the label at the start of the arc
+                        },
                     }
                 }
             });
