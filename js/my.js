@@ -12,16 +12,29 @@ const resultsCollection = db.collection('user').doc(user.email).collection('resu
 // Get all documents from the "results" subcollection
 resultsCollection.orderBy('time', 'desc').get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-        // doc.data() is the data within each document
+        // doc.data() is the data within each document 
         console.log(doc.id, " => ", doc.data());
         var data = doc.data();
         let time = time_ago(data.time);
 
+        let score = data.score;
+        if (score == "FAILED") {
+            score = `<span style="color: red;">FAILED</span>`;
+        } else {
+            score = `<span style="color: green;">Score: ${score}</span>`;
+        }
+
         var html = `
         <div class="card" title="HASH: ${data.hash}\nInput File: ${data.input}\nOutput File: ${data.output}\nTime: ${time}\n\nScore: ${data.score}">
-                <h3 class="card-title">${data.input} , ${data.output}</h3>
-                <strong>Score: ${data.score}</strong>
-                <p>Time: ${time}</p>
+                
+            <div class="card-inside">
+            <h3 class="card-title">Instance: ${data.input}</h3>
+            <h3 class="card-title">Solution: ${data.output}</h3>
+            </div>
+            <div class="card-inside">
+                <strong>${score}</strong>
+                <p>Validation Time: ${time}</p>
+                </div>
         </div>
         `;
         document.getElementById("mySubmissions").innerHTML += html;

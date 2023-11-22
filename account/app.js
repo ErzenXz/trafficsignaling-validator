@@ -62,28 +62,68 @@ async function login() {
     toast("Please wait...", 3000);
 
 
+    let userIP = await fetch('https://api.ipify.org?format=json').then(response => response.json()).then(data => data.ip);
+
+    if (userIP == null) {
+        userIP = await fetch('https://api.bigdatacloud.net/data/client-ip').then(response => response.json()).then(data => data.ip);
+        if (userIP == null) {
+            userIP = "Unknown IP";
+        }
+    }
+
     firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
-            toast("Login successful! ", 3000);
 
             // Get the user data from the database
             let uid = firebase.auth().currentUser.uid;
-            firebase.firestore().collection("users").doc(uid).get().then((doc) => {
+            firebase.firestore().collection("users").doc(uid).get().then(async (doc) => {
                 if (doc.exists) {
                     let userData = doc.data();
 
                     // Get the time into Firebase Timestamp format
                     let updatedLastSignInTime = firebase.firestore.Timestamp.fromDate(new Date());
 
+                    let loginHistory = {
+                        userIP: userIP,
+                        loginTime: updatedLastSignInTime,
+                        status: "Success"
+                    };
+
+                    let updatedLoginHistoryArray = userData.loginHistoryArray;
+                    updatedLoginHistoryArray.push(loginHistory);
+
+                    // If the user has not verified their email, send the verification email
+
+                    // Get the data from authentication
+
+                    let userA = firebase.auth().currentUser;
+                    let emailVerified = userA.emailVerified;
+
+                    if (!emailVerified) {
+                        firebase.auth().currentUser.sendEmailVerification().then(function () {
+                            // Email sent.
+                            toast("Verification email has been sent to your email!", 3000);
+                        }).catch(function (error) {
+                            // An error happened.
+                            toast("Error sending verification email!", 3000);
+                        });
+                    } else {
+                        emailVerified = true;
+                    }
+
 
                     // Update the last sign in time
                     firebase.firestore().collection("users").doc(uid).update({
-                        lastSignInTime: updatedLastSignInTime
+                        lastSignInTime: updatedLastSignInTime,
+                        loginHistoryArray: updatedLoginHistoryArray,
+                        loginHistory: loginHistory,
+                        emailVerified: emailVerified
                     }).then(() => {
                         console.log("Last sign in time updated!");
                         localStorage.setItem("user", JSON.stringify(userData));
+                        toast("Login successful! ", 3000);
                         setTimeout(() => {
                             window.location.href = location.origin;
                         }, 500);
@@ -116,7 +156,7 @@ async function login() {
             var errorCode = error.code;
             var errorMessage = error.message;
             toast(errorMessage, 8000);
-
+            console.log(error);
         });
 
 }
@@ -207,6 +247,11 @@ async function signup() {
         return;
     }
 
+    // Remove all special characters from the username
+
+    username = username.replace(/[^a-zA-Z0-9]/g, "");
+
+    toast("Please wait...", 3000);
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(async (userCredential) => {
@@ -223,6 +268,64 @@ async function signup() {
             let creationTime = user.metadata.creationTime;
             let lastSignInTime = user.metadata.lastSignInTime;
 
+            let userIP = await fetch('https://api.ipify.org?format=json').then(response => response.json()).then(data => data.ip);
+
+            if (userIP == null) {
+                userIP = await fetch('https://api.bigdatacloud.net/data/client-ip').then(response => response.json()).then(data => data.ip);
+                if (userIP == null) {
+                    userIP = "Unknown IP";
+                }
+            }
+
+            let userAgent = navigator.userAgent;
+            let userBrowser = navigator.appName;
+            let userOS = navigator.platform;
+            let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            let userLanguage = navigator.language;
+            let userCountry = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            let userSubdomain = getSubdomain(window.location.hostname);
+            let userDomain = window.location.hostname;
+            let userURL = window.location.href;
+            let userReferrer = document.referrer;
+            let userScreenResolution = window.screen.width + "x" + window.screen.height;
+            let userScreenColorDepth = window.screen.colorDepth;
+            let userScreenPixelDepth = window.screen.pixelDepth;
+            let userCookiesEnabled = navigator.cookieEnabled;
+            let userLocalStorageEnabled = typeof (Storage) !== "undefined";
+            let userSessionStorageEnabled = typeof (sessionStorage) !== "undefined";
+            let userDoNotTrack = navigator.doNotTrack;
+            let userAdBlockEnabled = false;
+
+
+            let browserInformation = {
+                userAgent,
+                userBrowser,
+                userOS,
+                userTimezone,
+                userLanguage,
+                userCountry,
+                userSubdomain,
+                userDomain,
+                userURL,
+                userReferrer,
+                userScreenResolution,
+                userScreenColorDepth,
+                userScreenPixelDepth,
+                userCookiesEnabled,
+                userLocalStorageEnabled,
+                userSessionStorageEnabled,
+                userDoNotTrack,
+                userAdBlockEnabled
+            };
+
+            let loginHistory = {
+                userIP,
+                loginTime: firebase.firestore.Timestamp.fromDate(new Date()),
+                status: "Success"
+            };
+
+            let loginHistoryArray = [];
+
             let userData = {
                 uid,
                 email,
@@ -234,8 +337,25 @@ async function signup() {
                 creationTime,
                 lastSignInTime,
                 fullName,
-                username
+                username,
+                userIP,
+                browserInformation,
+                loginHistory,
+                loginHistoryArray
             };
+
+
+            // Send the verification email
+            user.sendEmailVerification().then(function () {
+                // Email sent.
+                toast("Verification email has been sent to your email!", 3000);
+            }).catch(function (error) {
+                // An error happened.
+                toast("Error sending verification email!", 3000);
+            });
+
+            loginHistoryArray.push(loginHistory);
+
 
             await firebase.firestore().collection("users").doc(uid).set(userData).then(() => {
                 // Save the user data in the local storage
@@ -320,3 +440,34 @@ function toast(message, duration = 4500, delay = 0) {
     };
 }
 
+
+
+function forgotPassword() {
+    let email = document.getElementById("email").value;
+
+    if (email == "") {
+        toast("Please enter an email address");
+        return;
+    }
+
+    // ANTIBOT with prompt
+
+    let a = Math.floor(Math.random() * 10);
+    let b = Math.floor(Math.random() * 10);
+    let promptAnswer = prompt(`Please enter the answer to the following question: What is ${a} + ${b}?`);
+
+    let answer = a + b;
+
+    if (promptAnswer != answer) {
+        toast("Incorrect answer!");
+        return;
+    }
+
+    firebase.auth().sendPasswordResetEmail(email).then(function () {
+        // Email sent.
+        toast("Password reset email sent!", 3000);
+    }).catch(function (error) {
+        // An error happened.
+        toast("Error sending password reset email!", 3000);
+    });
+}

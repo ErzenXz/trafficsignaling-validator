@@ -25,6 +25,7 @@
     <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-auth.min.js"></script>
 
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -152,10 +153,21 @@
                 <button id="btn" class="hidden" onclick="validateData()">Validate</button>
             </div>
             <h2 id="result" class="hidden"></h2>
+
             <div id="info" class="hidden"></div>
             <h2 id="validation" class="hidden"></h2>
         </div>
 
+        <div class="charts">
+
+            <div class="chart" style="margin: 0.5 rem;">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="chart" style="margin: 0.5 rem;">
+                <canvas id="myChart2"></canvas>
+            </div>
+
+        </div>
         <div class="scores hidden" id="scores"></div>
 
         <br>
@@ -196,21 +208,6 @@
     <script defer src="js/dashboard.js"></script>
 
     <script defer src="app.js"></script>
-
-
-
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.js"
-        integrity="sha512-f8kZwYACKF8unHuRV7j/5ILZfflRncxHp1f6y/PKuuRpCVgpORNZMne1jrghNzTVlXabUXIg1iJ5PvhuAaau6Q=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.min.js"
-        integrity="sha512-vONptKEoKbP1gaC5UkbYDa9OPr04ur4bxaaqT7DAJxGHB2oogtseCPrl5e5hPFokGYotlGNV4d+GM593ka7iNA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js">
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 
 </body>
 

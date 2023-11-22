@@ -98,6 +98,8 @@ file1Input.addEventListener('change', function (event) {
 });
 
 
+let carsArr;
+let carsAfter;
 
 
 function validateData() {
@@ -117,6 +119,7 @@ function validateData() {
 
         let table = generateTable(results);
 
+
         document.getElementById("result").classList.remove("hidden");
         document.getElementById("inputForm").classList.add("hidden");
         document.getElementById("info").innerHTML = table;
@@ -125,7 +128,7 @@ function validateData() {
 
 function generateTable(dataArray) {
     let tableHTML = '<table>';
-    tableHTML += '<thead><tr><th>Constraint</th><th>Result</th></tr></thead>';
+    tableHTML += '<thead><tr><th>Constraints</th><th>Result</th></tr></thead>';
     tableHTML += '<tbody>';
 
     // Loop through each string in the dataArray and generate a table row
@@ -252,13 +255,13 @@ function parseSubmittedDataSet(data) {
             const numIncomingStreets = lines[currentLine + i + 1];
 
             if (typeof numIncomingStreets === 'undefined') {
-                results.push("Submission file has fewer lines than expected Error-Code:" + `Unexpected EOF (end of file) at line ${currentLine + i + 2}`);
+                results.push("The number of lines in the submitted file is less than the expected number. Error-Code: " + `Unexpected EOF (end of file) at line ${currentLine + i + 2}`);
                 // throw new Error([
                 //     'Submission file has fewer lines than expected',
                 //     `Unexpected EOF (end of file) at line ${currentLine + i + 2}`,
                 // ].join('. '));
             } else {
-                results.push("Submission file has normal number of lines");
+                results.push("The submitted file has the correct number of lines.");
             }
 
             if (isNaN(numIncomingStreets)) {
@@ -267,7 +270,7 @@ function parseSubmittedDataSet(data) {
                 //     `Invalid number of elements found at line ${currentLine + i + 3}`
                 // );
             } else {
-                results.push("Submission file has normal number of elements");
+                results.push("The submitted file has the expected number of elements.");
             }
 
             if (intersectionSchedulesById[intersectionId]) {
@@ -276,7 +279,7 @@ function parseSubmittedDataSet(data) {
                 //     `More than one adjustment was provided for intersection ${intersectionId}.`
                 // );
             } else {
-                results.push("Submission file has normal number of adjustments");
+                results.push("The submitted file has the valid number of adjustments.");
             }
 
             intersectionSchedulesById[intersectionId] = true;
@@ -299,7 +302,7 @@ function parseSubmittedDataSet(data) {
                     //     'so it cannot be part of the intersection schedule.',
                     // ].join(' '));
                 } else {
-                    results.push("Submission file has normal street names");
+                    results.push("The submitted file has the proper street names.");
                 }
 
                 if (isNaN(schedule)) {
@@ -309,7 +312,7 @@ function parseSubmittedDataSet(data) {
                     //     `that is not a number: ${schedule}.`,
                     // ].join(' '));
                 } else {
-                    results.push("Submission file has normal schedule for green light");
+                    results.push("The submitted file has the optimal schedule for green light.");
                 }
 
 
@@ -320,7 +323,7 @@ function parseSubmittedDataSet(data) {
                     //     `for green light that is between 1 and ${dataset.simulation.duration}.`,
                     // ].join(' '));
                 } else {
-                    results.push("Submission file has normal schedule for duration");
+                    results.push("The submitted file has the reasonable schedule for duration.");
                 }
 
                 dataset.streets[streetName].schedule = {
@@ -480,6 +483,7 @@ function createInsights() {
 
         let bestScore = 0;
         let formattedChange = 0;
+        let scoresArray = [];
 
         db.collection(`results`).doc(uhash).collection("data").orderBy('time', 'desc').get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -490,6 +494,7 @@ function createInsights() {
                 let time = new Date(data.time).toLocaleString();
 
                 let otherScore = calculateDifferenceInPercentage(score, data.score);
+                scoresArray.push(data.score);
 
                 if (otherScore > 0) {
                     otherScore = "+" + otherScore;
@@ -539,8 +544,6 @@ function createInsights() {
 
             let userScore = score;
 
-            console.log("User score: ", userScore);
-            console.log("Best score: ", bestScore);
 
             // Calculate the change in score in %
 
@@ -605,48 +608,122 @@ function createInsights() {
 
 
             const arrivedCarsInsights = [
-                `${numArrivedCars} of ${numCars}`,
-                `cars arrived before the deadline (${toPercentage(numArrivedCars / numCars)}).`,
+                // `${numArrivedCars} of ${numCars}`,
+                // `cars arrived before the deadline (${toPercentage(numArrivedCars / numCars)}).`,
             ];
+
+            carsArr = numArrivedCars;
+            carsAfter = numCars - numArrivedCars;
 
             if (arrivedCars.length) {
                 arrivedCarsInsights.push(...[
-                    `The earliest car arrived at its destination after ${arrivedCars[0].commuteTime}`,
-                    `seconds scoring ${arrivedCars[0].score} points, whereas the last`,
-                    `car arrived at its destination after ${arrivedCars[numArrivedCars - 1].commuteTime}`,
-                    `seconds scoring ${arrivedCars[numArrivedCars - 1].score} points.`,
-                    `Cars that arrived within the deadline drove for an average of ${averageCommuteTime}`,
+                    `The fastest car reached its destination in ${arrivedCars[0].commuteTime}`,
+                    `seconds earning ${arrivedCars[0].score} points. The slowest car took`,
+                    `${arrivedCars[numArrivedCars - 1].commuteTime}`,
+                    `seconds earning ${arrivedCars[numArrivedCars - 1].score} points.`,
+                    `The average driving time for the cars that met the deadline was ${averageCommuteTime}`,
                     'seconds to arrive at their destination.',
                 ]);
 
                 if (bonusPoint) {
                     arrivedCarsInsights.push(...[
-                        `The total bonus points earned by cars that arrived within the deadline`,
-                        `is ${earlyArrivalBonus} points.`,
+                        `The total bonus points awarded to the cars that met the deadline`,
+                        `was ${earlyArrivalBonus} points.`,
                     ]);
                 }
 
                 if (numArrivedCars < numCars) {
                     const numLateCars = numCars - numArrivedCars;
 
-                    arrivedCarsInsights.push(...[
-                        `${numLateCars} of ${numCars} cars arrived after the deadline`,
-                        `(${toPercentage(numLateCars / numCars)}).`,
-                    ]);
+                    // arrivedCarsInsights.push(...[
+                    //     `${numLateCars} of ${numCars} cars arrived after the deadline`,
+                    //     `(${toPercentage(numLateCars / numCars)}).`,
+                    // ]);
                 }
 
 
             }
+
+            // If it has not failed, then create a chart
+
+
+
+            let chart = document.getElementById("myChart");
+            let ctx = chart.getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ["Cars before Deadline", "Cars after Deadline"],
+                    datasets: [{
+                        label: ["# of Cars"],
+                        data: [carsArr, carsAfter],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Cars before Deadline vs Cars after Deadline'
+                        }
+                    }
+                }
+            });
+
+            // Create a chart for the score
+
+            let allScores = new Set(scoresArray);
+
+            // Remvoe the "FAILED" score
+
+            allScores.delete("FAILED");
+
+            let scoreChart = document.getElementById("myChart2");
+            let scoreCtx = scoreChart.getContext('2d');
+            let scoreChartChart = new Chart(scoreCtx, {
+                type: 'bar',
+                data: {
+                    labels: [...allScores],
+                    datasets: [{
+                        label: "Scores",
+                        data: [...allScores],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Scores'
+                        }
+                    }
+                }
+            });
+
 
             document.getElementById("result").innerHTML += `<h1 class="mini">The submited file has scored</h1> <span class="change">${formattedChange}</span> <span class="bigscore">${score} points</span><br><br>`;
             document.getElementById("result").innerHTML += arrivedCarsInsights.join(' ');
             document.getElementById("result").innerHTML += `<br><br>`;
         });
 
+
+
+
         document.getElementById("result").classList.remove("hidden");
         document.getElementById("info").classList.remove("hidden");
         document.getElementById("validation").classList.remove("hidden");
         document.getElementById("scores").classList.remove("hidden");
+
+
+
 
 
     } else {

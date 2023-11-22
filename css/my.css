@@ -1,5 +1,5 @@
 .mySubs {
-    background-color: var(--blue-color);
+    background-color: var(--button);
     padding: 20px;
     margin: 20px 0;
     border-radius: 5px;
@@ -12,13 +12,37 @@
     justify-content: center;
     align-items: center;
     gap: 15px;
+    flex-direction: column;
 }
 
 .mySubs .card {
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid var(--border);
     box-shadow: 0 0 5px var(--border);
     overflow: hidden;
     color: var(--text-color);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-inside {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-inside strong {
+    font-size: 28px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
 }
